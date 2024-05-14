@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La playlist {{ playlist.name }}{% endblock %}
+
+{% block body %}
+
+<h1>Playlist {{ playlist.name }}</h1>
+
+<table>
+		<thead>
+			<tr>
+                <th scope="col">No</th>
+				<th scope="col">Artiste</th>
+				<th scope="col">Titre</th>
+				<th scope="col">Album</th>
+				<th scope="col">Durée</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for track in tracks %}
+				{% set artists = [] %}
+				{% for artist in track.track.artists %}
+				    {% set artists = artists|merge([artist.name]) %}
+				{% endfor %}
+				<tr>
+                    <th scope="row">{{ loop.index }}</th>
+					<th>{{ artists|join(' & ') }}</th>
+					<td>{{ track.track.name }}</td>
+					<td>{{ track.track.album.name }}</td>
+					<td>{{ track.track.duration_ms  }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name}) }}><button id="generate" class="btn">Generate</button></a>
+
+{% endblock %}

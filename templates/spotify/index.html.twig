@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Spotify Random Playlist generator{% endblock %}
+
+{% block body %}
+
+<h1>Spotify Random Playlist generator</h1>
+
+<p>Generate a random playlist from your Spotify account.</p>
+
+<ul>
+{% for playlist in playlists %}
+    <li><a href={{ path("app_playlist_show", {"id": playlist.id}) }}>{{ playlist.name }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

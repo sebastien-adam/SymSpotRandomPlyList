@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouvelle playlist aléatoire basée sur {{name}}
+{% endblock %}
+
+{% block body %}
+
+	<h1>Nouvelle playlist aléatoire basée sur {{ name }}</h1>
+
+	<table>
+		<thead>
+			<tr>
+                <th scope="col">No</th>
+				<th scope="col">Artiste</th>
+				<th scope="col">Titre</th>
+				<th scope="col">Album</th>
+				<th scope="col">Durée</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for track in playlist %}
+				{% set artists = [] %}
+				{% for artist in track.artists %}
+					{% set artists = artists|merge([artist.name]) %}
+				{% endfor %}
+				<tr>
+                    <th scope="row">{{ loop.index }}</th>
+					<th>{{ artists|join(' & ') }}</th>
+					<td>{{ track.name }}</td>
+					<td>{{ track.album.name }}</td>
+					<td>{{ track.duration_ms  }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+<a href={{ path("app_playlist_create") }}><button id="createNew" class="btn">Créer cette nouvelle playlist</button></a>
+
+{% endblock %}
