@@ -44,7 +44,6 @@ class SpotifyController extends AbstractController
     // Show a playlist based on its ID
     #[Route('/show/{id}', name: 'app_playlist_show')]
     public function show(string $id){
-        //dd($this->api->getPlaylistTracks($id), ["offset" => 1]);
         // Get the playlist
         $playlist = $this->api->getPlaylist($id);
         // Get the number of tracks in the playlist
