@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<h1>Playlist: {{ playlist.name }}</h1>
+<h1>Playlist: <ins>{{ playlist.name }}</ins></h1>
 
 <a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name}) }}><button id="generate" class="btn">Generate</button></a>
 
