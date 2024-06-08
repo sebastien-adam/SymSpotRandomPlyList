@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}La playlist {{ playlist.name }}{% endblock %}
+{% block title %}Playlist: {{ playlist.name }}{% endblock %}
 
 {% block body %}
 
@@ -11,25 +11,29 @@
 <table>
 		<thead>
 			<tr>
-                <th scope="col">No</th>
-				<th scope="col">Artiste</th>
-				<th scope="col">Titre</th>
+                <th scope="col">Index</th>
+				<th scope="col">Artist</th>
+				<th scope="col">Title</th>
 				<th scope="col">Album</th>
-				<th scope="col">Durée</th>
+				<th scope="col">Duration</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for track in tracks %}
+				{% set track = track.track %}
 				{% set artists = [] %}
-				{% for artist in track.track.artists %}
+				{% for artist in track.artists %}
 				    {% set artists = artists|merge([artist.name]) %}
 				{% endfor %}
 				<tr>
                     <th scope="row">{{ loop.index }}</th>
 					<th>{{ artists|join(' & ') }}</th>
-					<td>{{ track.track.name }}</td>
-					<td>{{ track.track.album.name }}</td>
-					<td>{{ track.track.duration_ms  }}</td>
+					<td>{{ track.name }}</td>
+					<td>{{ track.album.name }}</td>
+					{# convert track duration (in ms) in a more readable style hh:mm:ss #}
+					{# display hours only if >= 3600s #}
+					{% set duration_s = (track.duration_ms / 1000)|number_format %}
+					<td>{{ duration_s >= 3600 ? duration_s | date('H:i:s') : duration_s |date('i:s') }} </td>
 				</tr>
 			{% endfor %}
 		</tbody>

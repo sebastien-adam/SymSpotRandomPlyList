@@ -74,8 +74,6 @@ class SpotifyController extends AbstractController
         // Get the tracks of the playlist from cache
         $tracks = $this->cache->getItem('currentPlaylistTracks')->get();
 
-        //$tracks = $this->api->getPlaylistTracks($id, ['fields' => 'items(track(id), track(artists.id))']);
-
         // For each track, get the related artists, get a random artist and get a random track of this artist
         $newPlaylist = [];
         $newPlaylistId = [];
@@ -106,7 +104,7 @@ class SpotifyController extends AbstractController
 
         return $this->render('spotify/new.html.twig',
         [
-            'playlist' => $newPlaylist,
+            'tracks' => $newPlaylist,
             'name' => $name
         ]);
     }
@@ -124,7 +122,7 @@ class SpotifyController extends AbstractController
         // Create the new playlist
         $newPlaylist = $this->api->createPlaylist([
             'name' => $newPlaylistName,
-            'description' => "Une playlist générée automatiquement et basé sur $newPlaylistName",
+            'description' => "A random playlist based on $newPlaylistName",
             'public' => false,
         ]);
 
