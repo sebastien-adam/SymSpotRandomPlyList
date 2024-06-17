@@ -74,8 +74,6 @@ class SpotifyController extends AbstractController
         // Get the tracks of the playlist from cache
         $tracks = $this->cache->getItem('currentPlaylistTracks')->get();
 
-        //$tracks = $this->api->getPlaylistTracks($id, ['fields' => 'items(track(id), track(artists.id))']);
-
         // For each track, get the related artists, get a random artist and get a random track of this artist
         $newPlaylist = [];
         $newPlaylistId = [];
@@ -90,15 +88,17 @@ class SpotifyController extends AbstractController
             }
             $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
             $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
-            $newPlaylist[] = $newTrack;
+            $newPlaylist[] = array("track" => $newTrack);
             $newPlaylistId[] = $newTrack->id;
         }
         
+        // Save the new playlist in cache
         $cachePlaylistTracks = $this->cache->getItem('newPlaylistTrack');
         $cachePlaylistTracks->set($newPlaylistId);
         $cachePlaylistTracks->expiresAfter(3600);
         $this->cache->save($cachePlaylistTracks);
 
+        // Save the name of the new playlist in cache
         $cachePlaylistName = $this->cache->getItem('newPlaylistName');
         $cachePlaylistName->set($name . ' - ' . date('d-m-Y H:i'));
         $cachePlaylistName->expiresAfter(3600);
@@ -106,7 +106,7 @@ class SpotifyController extends AbstractController
 
         return $this->render('spotify/new.html.twig',
         [
-            'playlist' => $newPlaylist,
+            'tracks' => $newPlaylist,
             'name' => $name
         ]);
     }
@@ -124,7 +124,7 @@ class SpotifyController extends AbstractController
         // Create the new playlist
         $newPlaylist = $this->api->createPlaylist([
             'name' => $newPlaylistName,
-            'description' => "Une playlist générée automatiquement et basé sur $newPlaylistName",
+            'description' => "A random playlist based on $newPlaylistName",
             'public' => false,
         ]);
 
