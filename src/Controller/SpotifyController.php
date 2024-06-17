@@ -88,15 +88,17 @@ class SpotifyController extends AbstractController
             }
             $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
             $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
-            $newPlaylist[] = $newTrack;
+            $newPlaylist[] = array("track" => $newTrack);
             $newPlaylistId[] = $newTrack->id;
         }
         
+        // Save the new playlist in cache
         $cachePlaylistTracks = $this->cache->getItem('newPlaylistTrack');
         $cachePlaylistTracks->set($newPlaylistId);
         $cachePlaylistTracks->expiresAfter(3600);
         $this->cache->save($cachePlaylistTracks);
 
+        // Save the name of the new playlist in cache
         $cachePlaylistName = $this->cache->getItem('newPlaylistName');
         $cachePlaylistName->set($name . ' - ' . date('d-m-Y H:i'));
         $cachePlaylistName->expiresAfter(3600);
