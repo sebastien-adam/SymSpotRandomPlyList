@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
-{% block title %}New random playlist based on {{name}}
+{% block title %}New random playlist based on
+	{{name}}
 {% endblock %}
 
 {% block body %}
 
-	<h1>New random playlist based on <ins>{{ name }}</ins></h1>
-
-<a href={{ path("app_playlist_create") }}><button id="createNew" class="btn">Save this new playlist</button></a>
-	{% include "spotify/_partials/table.html.twig" %}
+	<h1>New random playlist based on
+		<ins>{{ name }}</ins>
+	</h1>
+	<section>
+		<a href={{ path("app_playlist_create") }}>
+			<button id="createNew" class="btn outline">Save this new playlist</button>
+		</a>
+	</section>
+	<section>
+		{% include "spotify/_partials/table.html.twig" %}
+	</section>
 {% endblock %}
