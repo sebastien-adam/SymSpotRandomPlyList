@@ -1,13 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Playlist: {{ playlist.name }}{% endblock %}
+{% block title %}Playlist:
+	{{ playlist.name }}
+{% endblock %}
 
 {% block body %}
 
-<h1>Playlist: <ins>{{ playlist.name }}</ins></h1>
 
-<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name}) }}><button id="generate" class="btn">Generate</button></a>
+	<h1>Playlist:
+		<ins>{{ playlist.name }}</ins>
+	</h1>
 
-{% include "spotify/_partials/table.html.twig" %}
+    <section>
+	<div class="container grid">
+        <div></div>
+		<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "default"} ) }}>
+			<button id="generateDefault" class="btn outline">Generate Random Artist/Tracks</button>
+		</a>
+		<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "top"} ) }}>
+			<button id="generateTop" class="btn outline secondary">Generate Top Artist Tracks</button>
+		</a>
+		<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "default"} ) }}>
+			<button id="generateAlbum" class="btn outline contrast">Generate Random Tracks from artist</button>
+		</a>
+        <div></div>
+	</div>
+    </section>
+
+    <section>
+	{% include "spotify/_partials/table.html.twig" %}
+    </section>
 
 {% endblock %}

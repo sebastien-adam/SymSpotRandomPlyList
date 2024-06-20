@@ -49,10 +49,10 @@ class SpotifyController extends AbstractController
         // Get the number of tracks in the playlist
         $total = $playlist->tracks->total;
 
-        // Get all the tracks of the playlist with only the name, artists, album and duration
+        // Get all the tracks of the playlist with only the id, name, artists, album and duration
         $tracks = [];
         for($offset = 0; $offset < $total; $offset += 100){
-            $tracks = array_merge($tracks, $this->api->getPlaylistTracks($id, ['fields' => 'items(track(name), track(artists), track(album), track(duration_ms))', 'offset' => $offset, 'limit'=> 100 ])->items);
+            $tracks = array_merge($tracks, $this->api->getPlaylistTracks($id, ['fields' => 'items(track(id), track(name), track(artists), track(album), track(duration_ms))', 'offset' => $offset, 'limit'=> 100 ])->items);
         }
 
         $currentPlaylistTracks = $this->cache->getItem('currentPlaylistTracks');
@@ -68,8 +68,8 @@ class SpotifyController extends AbstractController
     }
 
     // Generate a new playlist based on the artists related to the artists of the tracks of the playlist
-    #[Route('/generate/{id}/{name}', name: 'app_playlist_generate')]
-    public function generateNewPlaylist(string $id, string $name){
+    #[Route('/generate/{id}/{name}/{type}', name: 'app_playlist_generate')]
+    public function generateNewPlaylist(string $id, string $name, string $type = "default"){
         
         // Get the tracks of the playlist from cache
         $tracks = $this->cache->getItem('currentPlaylistTracks')->get();
@@ -78,16 +78,15 @@ class SpotifyController extends AbstractController
         $newPlaylist = [];
         $newPlaylistId = [];
         foreach ($tracks as $track) {
-            $relatedArtists = $this->api->getArtistRelatedArtists($track->track->artists[0]->id);
-            // If no related artists, take the artist of the track
-            if($relatedArtists != null && count($relatedArtists->artists) > 0){
-                $randomArtist = $relatedArtists->artists[array_rand($relatedArtists->artists)];
+            if ($type == "top"){
+                $newTrack = $this->getRandomTopSongFromArtist($track);
             }
-            else{
-                $randomArtist = $track->track->artists[0];
+            else if ($type == "album"){
+                $newTrack = $this->getRandomSongFromArtist($track);
             }
-            $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
-            $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
+            else {
+                $newTrack = $this->getRandomRelatedTrackFromTrack($track);
+            }
             $newPlaylist[] = array("track" => $newTrack);
             $newPlaylistId[] = $newTrack->id;
         }
@@ -173,5 +172,61 @@ class SpotifyController extends AbstractController
         return $this->redirect($this->session->getAuthorizeUrl($options));
     }
 
-    
+    /**
+     * Get a random top song from an artist
+     *
+     * @param object $track
+     * @return array|object
+     */
+    private function getRandomTopSongFromArtist(object $track): array|object
+    {
+        $artist = $this->api->getArtistTopTracks($track->track->artists[0]->id, ['market' => 'FR']);
+        // remove the track from the artist top tracks
+        //dd($track);
+        $artist->tracks = array_filter($artist->tracks, function($value) use ($track){
+            return $value->id != $track->track->id;
+        });
+        $randomTrack = $artist->tracks[array_rand($artist->tracks)];
+        return $randomTrack;
+    }
+
+   /**
+    * Get a random song from a random album of an artist
+    *
+    * @param object $track
+    * @return array|object
+    */
+    private function getRandomSongFromArtist(object $track): array|object
+    {
+        $albums = $this->api->getArtistAlbums($track->track->artists[0]->id, ['market' => 'FR']);
+        $randomAlbum = $albums->items[array_rand($albums->items)];
+        $tracks = $this->api->getAlbumTracks($randomAlbum->id, ['market' => 'FR']);
+        // remove the track from the album tracks
+        $tracks->items = array_filter($tracks->items, function($value) use ($track){
+            return $value->id != $track->track->id;
+        });
+        $randomTrack = $tracks->items[array_rand($tracks->items)];
+        return $randomTrack;
+    }
+
+    /**
+     * Get a random track from a related artist of the artist of the track
+     *
+     * @param object $track
+     * @return array|object
+     */
+    private function getRandomRelatedTrackFromTrack(object $track): array|object
+    {
+        $relatedArtists = $this->api->getArtistRelatedArtists($track->track->artists[0]->id);
+        // If no related artists, take the artist of the track
+        if($relatedArtists != null && count($relatedArtists->artists) > 0){
+            $randomArtist = $relatedArtists->artists[array_rand($relatedArtists->artists)];
+        }
+        else{
+            $randomArtist = $track->track->artists[0];
+        }
+        $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
+        $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
+        return $newTrack; 
+    }
 }

@@ -22,7 +22,7 @@
 				<td>{{ track.album.name }}</td>
 				{# convert track duration (in ms) in a more readable style hh:mm:ss #}
 				{# display hours only if >= 3600s #}
-				{% set duration_s = (track.duration_ms / 1000)|number_format %}
+				{% set duration_s = (track.duration_ms / 1000)|round() %}
 				<td>{{ duration_s >= 3600 ? duration_s | date('H:i:s') : duration_s |date('i:s') }}
 				</td>
 			</tr>
