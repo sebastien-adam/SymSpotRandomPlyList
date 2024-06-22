@@ -4,10 +4,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/sebastien-adam/SymSpotRandomPlyList">
-    <img src="images/logo.png" alt="No Logo for now" width="80" height="80">
+    <img src="assets/images/logo.svg" alt="No Logo for now" width="80" height="80">
   </a>
 
-<h3 align="center">Spotify Random Clone PLaylist Generator</h3>
+<h3 align="center">Spotify Random Playlist Generator</h3>
 
   <p align="center">
     Generates a playlist variant based on a Spotify user playlist
@@ -26,20 +26,22 @@
 
 
 > [!WARNING]
-> v0.1.0 WIP : This project is still in development, the main feature is working but the project is not yet fully functional and I will add more in the future.
+> v0.1.0 WIP : This project is still in active development, the main feature is working but the project is not yet fully functional and I will add more in the future.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-A missing feature in Spotify is the ability to generate a random playlist based on a user playlist. This project aims to fill this gap by providing a Symfony application that generates a random playlist based on a user playlist.
+A missing feature in Spotify is the ability to generate a random playlist based on a user playlist. This project aims to fill this gap.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
 * [Symfony](https://symfony.com/)
+* [Spotify API](https://developer.spotify.com/documentation/web-api/)
+* [PHP Spotify API](https://github.com/jwilsson/spotify-web-api-php)
 
 ## Getting Started
 
@@ -89,5 +91,11 @@ Also make sure you have the following installed on your computer:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Roadmap
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+See the [open issues](https://github.com/sebastien-adam/SymSpotRandomPlyList/issues) for a list of proposed features (and known issues).
+
+- [ ] Import and convert a m3u playlist
+- [ ] import user playlists to other services (Deezer, Tidal, Apple Music, etc.)
+- [ ] add a status to see the progress of the playlist generation
+- [ ] get more deep information about a track
