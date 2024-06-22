@@ -99,3 +99,4 @@ See the [open issues](https://github.com/sebastien-adam/SymSpotRandomPlyList/iss
 - [ ] import user playlists to other services (Deezer, Tidal, Apple Music, etc.)
 - [ ] add a status to see the progress of the playlist generation
 - [ ] get more deep information about a track
+- [ ] add a switch dark/ligt theme mode

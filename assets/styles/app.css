@@ -3,7 +3,10 @@
 }
 
 .btnRandom:hover {
-    color: #5dd121;
-    border-color: #5dd121;
+    color: var(--pico-primary-color);
+    border-color: var(--pico-primary-color);
 }
 
+.muted {
+    color: var(--pico-muted-color);
+}
