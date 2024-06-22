@@ -1,1 +1,9 @@
+.btnRandom {
+    height: 100%;
+}
+
+.btnRandom:hover {
+    color: #5dd121;
+    border-color: #5dd121;
+}
 

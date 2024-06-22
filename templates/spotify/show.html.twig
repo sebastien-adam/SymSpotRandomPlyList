@@ -1,13 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Playlist: {{ playlist.name }}{% endblock %}
+{% block title %}Playlist:
+	{{ playlist.name }}
+{% endblock %}
 
 {% block body %}
 
-<h1>Playlist: <ins>{{ playlist.name }}</ins></h1>
 
-<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name}) }}><button id="generate" class="btn">Generate</button></a>
+	<h1>Playlist:
+		<ins>{{ playlist.name }}</ins>
+	</h1>
 
-{% include "spotify/_partials/table.html.twig" %}
+	<section>
+		<small>
+			<p>You can generate 4 different type of random playlist. Each track is generated independently of the others.</p>
+			<ul>
+				<li>a playlist generated from random related artists and random track of this artist</li>
+				<li>a playlist generated from top tracks of the track artist</li>
+				<li>a playlist generated from random tracks of the track artist</li>
+				<li>a playlist generated from a mix of the 3 previous types</li>
+			</ul>
+		</small>
+	</section>
+
+	<section>
+		<div class="grid">
+			<div></div>
+			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "default"} ) }}>
+				<button id="generateDefault" class="btn outline secondary btnRandom">Generate Random Artist/Tracks</button>
+			</a>
+			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "top"} ) }}>
+				<button id="generateTop" class="btn outline secondary btnRandom">Generate Top Artist Tracks</button>
+			</a>
+			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "album"} ) }}>
+				<button id="generateAlbum" class="btn outline secondary btnRandom">Generate Random Tracks from Artist</button>
+			</a>
+			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "mix"} ) }}>
+				<button id="generateAlbum" class="btn outline secondary btnRandom">Generate Random Mix of the 3</button>
+			</a>
+			<div></div>
+		</div>
+	</section>
+
+	<section>
+		{% include "spotify/_partials/table.html.twig" %}
+	</section>
 
 {% endblock %}

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\PlaylistGenerator;
 
 class SpotifyController extends AbstractController
 {
@@ -49,10 +50,10 @@ class SpotifyController extends AbstractController
         // Get the number of tracks in the playlist
         $total = $playlist->tracks->total;
 
-        // Get all the tracks of the playlist with only the name, artists, album and duration
+        // Get all the tracks of the playlist with only the id, name, artists, album and duration
         $tracks = [];
         for($offset = 0; $offset < $total; $offset += 100){
-            $tracks = array_merge($tracks, $this->api->getPlaylistTracks($id, ['fields' => 'items(track(name), track(artists), track(album), track(duration_ms))', 'offset' => $offset, 'limit'=> 100 ])->items);
+            $tracks = array_merge($tracks, $this->api->getPlaylistTracks($id, ['fields' => 'items(track(id), track(name), track(artists), track(album), track(duration_ms))', 'offset' => $offset, 'limit'=> 100 ])->items);
         }
 
         $currentPlaylistTracks = $this->cache->getItem('currentPlaylistTracks');
@@ -68,9 +69,9 @@ class SpotifyController extends AbstractController
     }
 
     // Generate a new playlist based on the artists related to the artists of the tracks of the playlist
-    #[Route('/generate/{id}/{name}', name: 'app_playlist_generate')]
-    public function generateNewPlaylist(string $id, string $name){
-        
+    #[Route('/generate/{id}/{name}/{type}', name: 'app_playlist_generate')]
+    public function generateNewPlaylist(PlaylistGenerator $playlistGenerator, string $id, string $name, string $type = "default"){
+
         // Get the tracks of the playlist from cache
         $tracks = $this->cache->getItem('currentPlaylistTracks')->get();
 
@@ -78,20 +79,22 @@ class SpotifyController extends AbstractController
         $newPlaylist = [];
         $newPlaylistId = [];
         foreach ($tracks as $track) {
-            $relatedArtists = $this->api->getArtistRelatedArtists($track->track->artists[0]->id);
-            // If no related artists, take the artist of the track
-            if($relatedArtists != null && count($relatedArtists->artists) > 0){
-                $randomArtist = $relatedArtists->artists[array_rand($relatedArtists->artists)];
+            if ($type == "top"){
+                $newTrack = $playlistGenerator->getRandomTopSongFromArtist($track);
             }
-            else{
-                $randomArtist = $track->track->artists[0];
+            else if ($type == "album"){
+                $newTrack = $playlistGenerator->getRandomSongFromArtist($track);
             }
-            $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
-            $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
+            else if ($type == "mix") {
+                $newTrack = $playlistGenerator->getRandomMixTrack($track);
+            }
+            else {
+                $newTrack = $playlistGenerator->getRandomRelatedTrackFromTrack($track);
+            }
             $newPlaylist[] = array("track" => $newTrack);
             $newPlaylistId[] = $newTrack->id;
         }
-        
+
         // Save the new playlist in cache
         $cachePlaylistTracks = $this->cache->getItem('newPlaylistTrack');
         $cachePlaylistTracks->set($newPlaylistId);
