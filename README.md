@@ -31,9 +31,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+A missing feature in Spotify is the ability to generate a random playlist based on a user playlist. This project aims to fill this gap.  
 
-A missing feature in Spotify is the ability to generate a random playlist based on a user playlist. This project aims to fill this gap.
+![Spotify Random Playlist Generator](./spotify_random_playlist_screenshot.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -42,6 +42,7 @@ A missing feature in Spotify is the ability to generate a random playlist based 
 * [Symfony](https://symfony.com/)
 * [Spotify API](https://developer.spotify.com/documentation/web-api/)
 * [PHP Spotify API](https://github.com/jwilsson/spotify-web-api-php)
+* [picoCss](https://picocss.com/)
 
 ## Getting Started
 

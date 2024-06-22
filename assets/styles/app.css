@@ -10,3 +10,13 @@
 .muted {
     color: var(--pico-muted-color);
 }
+
+.p4 {
+    padding: 2rem;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
