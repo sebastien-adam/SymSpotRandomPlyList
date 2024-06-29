@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/sebastien-adam/SymSpotRandomPlyList">
-    <img src="assets/images/logo.svg" alt="No Logo for now" width="80" height="80">
+    <img src="assets/images/logo.svg" alt="The spotify random playlist generator logo" width="80" height="80">
   </a>
 
 <h3 align="center">Spotify Random Playlist Generator</h3>
@@ -50,7 +50,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-First, you must register your application at https://developer.spotify.com/dashboard/applications to obtain the `client_id` and `client_secret`.  
+First, you need a Spotify account and you must register your application at https://developer.spotify.com/dashboard/applications to obtain the `client_id` and `client_secret`.  
 You need to register the redirect_uri in the Spotify dashboard to https://127.0.0.1:8000/callback/ for example.
 
 Also make sure you have the following installed on your computer:
@@ -96,8 +96,9 @@ Also make sure you have the following installed on your computer:
 
 See the [open issues](https://github.com/sebastien-adam/SymSpotRandomPlyList/issues) for a list of proposed features (and known issues).
 
-- [ ] Import and convert a m3u playlist
-- [ ] import user playlists to other services (Deezer, Tidal, Apple Music, etc.)
-- [ ] add a status to see the progress of the playlist generation
-- [ ] get more deep information about a track
-- [ ] add a switch dark/ligt theme mode
+* [ ] Import and convert a m3u playlist
+* [ ] import user playlists to other services (Deezer, Tidal, Apple Music, etc.)
+* [ ] add a status to see the progress of the playlist generation
+* [ ] get more deep information about a track
+* [ ] add a switch dark/light theme mode
+* [ ] write tests
