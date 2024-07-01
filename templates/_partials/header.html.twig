@@ -1,13 +1,26 @@
-<header>	
-		<nav>
+<header>
+	<nav>
 		<ul>
-			<li><a href="{{ path('app_spotify') }}"><img src="{{ asset('images/logo.svg') }}" alt="logo" width="100" height="100"></a></li>
-			<li><strong>Spotify Random Playlist Generator</strong></li>
+			<li>
+				<a href="{{ path('app_spotify') }}"><img src="{{ asset('images/logo.svg') }}" alt="logo" width="100" height="100"></a>
+			</li>
+			<li>
+				<strong>Spotify Random Playlist Generator</strong>
+			</li>
 		</ul>
-			<ul>
-				<li><a href="{{ path('app_spotify') }}">Home</a></li>
-				<li><a href="#">About</a></li>
-			</ul>
-		</nav>
-     <hr>
-	</header>
+		<ul>
+			<li>
+				<a href="{{ path('app_spotify') }}">Home</a>
+			</li>
+			<li>
+				<a href="#">About</a>
+			</li>
+			<li {{ stimulus_controller('darkmode') }}>
+				<button data-action="click->darkmode#toggle">
+				<span {{ stimulus_target("darkmode", "light")}}>{{ ux_icon('circum:light') }}</span>
+				<span {{ stimulus_target("darkmode", "dark")}}>{{ ux_icon('circum:dark') }}</span></button>
+			</li>
+		</ul>
+	</nav>
+	<hr>
+</header>
