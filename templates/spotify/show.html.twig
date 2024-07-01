@@ -23,22 +23,25 @@
 		</small>
 	</section>
 
-	<section>
+	<section {{ stimulus_controller('loading') }}>
 		<div class="grid">
 			<div></div>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "default"} ) }}>
-				<button id="generateDefault" class="btn outline contrast btnRandom">Generate Random Artist/Tracks</button>
+				<button id="generateDefault" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Random Artist/Tracks</button>
 			</a>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "top"} ) }}>
-				<button id="generateTop" class="btn outline contrast btnRandom">Generate Top Artist Tracks</button>
+				<button id="generateTop" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Top Artist Tracks</button>
 			</a>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "album"} ) }}>
-				<button id="generateAlbum" class="btn outline contrast btnRandom">Generate Random Tracks from Artist</button>
+				<button id="generateAlbum" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Random Tracks from Artist</button>
 			</a>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "mix"} ) }}>
-				<button id="generateAlbum" class="btn outline contrast btnRandom">Generate Random Mix of the 3</button>
+				<button id="generateAlbum" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Random Mix of the 3</button>
 			</a>
 			<div></div>
+		</div>
+		<div class="p4 flex">
+		<mark aria-busy="false" {{ stimulus_target("loading", "busy")}} hidden> Generating the playlist...</mark>
 		</div>
 		<hr />
 	</section>
