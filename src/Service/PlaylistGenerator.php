@@ -51,7 +51,11 @@ class PlaylistGenerator
         $artist->tracks = array_filter($artist->tracks, function ($value) use ($track) {
             return $value->id != $track->track->id;
         });
-        
+
+        // If the artist has no top tracks, return the current track
+        if (count($artist->tracks) == 0) {
+            return $track;
+        }
         $randomTrack = $artist->tracks[array_rand($artist->tracks)];
         return $randomTrack;
     }
@@ -65,17 +69,31 @@ class PlaylistGenerator
     public function getRandomSongFromArtist(object $track): array|object
     {
         $albums = $this->api->getArtistAlbums($track->track->artists[0]->id, ['market' => 'FR']);
+
+        // If the artist has no albums, take a random top song from the artist
+        if ($albums->total == 0) {
+            return $this->getRandomTopSongFromArtist($track);
+        }
         $randomAlbum = $albums->items[array_rand($albums->items)];
         $tracks = $this->api->getAlbumTracks($randomAlbum->id, ['market' => 'FR']);
 
+        // If the album has no tracks, take a random top song from the artist
+        if ($tracks->total == 0) {
+            return $this->getRandomTopSongFromArtist($track);
+        }
         // remove the current track from the album tracks
         $tracks->items = array_filter($tracks->items, function ($value) use ($track) {
             return $value->id != $track->track->id;
         });
-        
+
+        // If the album has no tracks left, take a random top song from the artist
+        if (count($tracks->items) == 0) {
+            return $this->getRandomTopSongFromArtist($track);
+        }
+
         $randomTrack = $tracks->items[array_rand($tracks->items)];
         $randomTrack->album = $randomAlbum;
-        
+
         return $randomTrack;
     }
 
@@ -97,13 +115,18 @@ class PlaylistGenerator
         }
 
         $randomArtistTopTracks = $this->api->getArtistTopTracks($randomArtist->id, ['market' => 'FR']);
-        
+
         //remove the current track from the artist top tracks
         $randomArtistTopTracks->tracks = array_filter($randomArtistTopTracks->tracks, function ($value) use ($track) {
             return $value->id != $track->track->id;
         });
 
+        // If the artist has no top tracks, take a random top song from the artist
+        if (count($randomArtistTopTracks->tracks) == 0) {
+            return $this->getRandomTopSongFromArtist($track);
+        }
         $newTrack = $randomArtistTopTracks->tracks[array_rand($randomArtistTopTracks->tracks)];
+
         return $newTrack;
     }
 }
