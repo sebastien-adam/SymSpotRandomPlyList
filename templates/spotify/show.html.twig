@@ -27,7 +27,7 @@
 		<div class="grid">
 			<div></div>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "default"} ) }}>
-				<button id="generateDefault" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Random Artist/Tracks</button>
+				<button id="generateDefault" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Random Related Artist/Tracks</button>
 			</a>
 			<a href={{ path("app_playlist_generate", {"id": playlist.id, "name": playlist.name, "type": "top"} ) }}>
 				<button id="generateTop" class="btn outline contrast btnRandom" data-action="click->loading#show">Generate Top Artist Tracks</button>
