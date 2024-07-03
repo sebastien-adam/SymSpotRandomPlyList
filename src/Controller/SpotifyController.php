@@ -20,6 +20,11 @@ class SpotifyController extends AbstractController
         private readonly CacheItemPoolInterface $cache,
         )
     {
+        $options = [
+            'auto_refresh' => true,
+            'auto_retry' => true,
+        ];
+        $this->api->setOptions($options);
     }
 
     // Show all playlists
